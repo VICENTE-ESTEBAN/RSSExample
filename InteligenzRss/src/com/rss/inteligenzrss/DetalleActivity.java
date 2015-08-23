@@ -31,7 +31,7 @@ public class DetalleActivity extends Activity{
 		final FragmentManager fm = getFragmentManager();
 
 		FragmentTransaction ft = fm.beginTransaction();
-
+		
 		DetalleFragment _fragment = DetalleFragment.newInstance(mItem);		
 					
 		ft.add(R.id.flContent, _fragment, TAGNAME_DETALLE);	            

@@ -31,6 +31,7 @@ public class PrefActivity extends Activity implements PrefFragment.OnPrefFragmen
 	@Override
 	public void finish() {
 	
+		//si se ha cambiado el proveedor de rss en las preferencias, devolver ok
 		setResult(mPreferenceChanged?Activity.RESULT_OK:Activity.RESULT_CANCELED);
 		
 		super.finish();

@@ -19,11 +19,7 @@ import android.util.Log;
 
 import com.rss.inteligenzrss.entities.Item;
 
-/**
- * This class parses XML feeds from stackoverflow.com.
- * Given an InputStream representation of a feed, it returns a List of entries,
- * where each list element represents a single entry (post) in the XML feed.
- */
+
 public class ParserRssJson {
 	private static final String TAG = ParserRssJson.class.getSimpleName();
 
@@ -51,6 +47,8 @@ public class ParserRssJson {
 					_entry.setDescription(_entryJSON.optString("content"));
 					_entry.setTitle(_entryJSON.optString("title"));
 					_entry.setUrlRss(_entryJSON.optString("link"));
+					
+					//formato del campo fecha:
 					//"publishedDate":"Wed, 19 Aug 2015 20:26:42 -0700",
 					 SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z", Locale.US);
 					 try{
@@ -87,7 +85,7 @@ public class ParserRssJson {
 						_post.setTitle(_postJSON.optString("title"));
 						_post.setDescription(_postJSON.optString("content"));
 						
-
+						//formato del campo fecha:
 						//"date":"2015-08-05 02:59:30"
 						 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 						 try{
@@ -107,9 +105,6 @@ public class ParserRssJson {
 							String _mimeType = _attachmentJSON.optString("mime_type");
 							if(_mimeType.indexOf("image")!=-1)
 							{
-								//Attachment _attachment = new Attachment();
-								//_attachment.setUrl(_attachmentJSON.optString("url"));
-								
 								_post.setUrlImage(_attachmentJSON.optString("url"));
 							}
 						}

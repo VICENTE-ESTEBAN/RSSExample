@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 		mFlContent = (FrameLayout) this.findViewById(R.id.flContent);		
 		
 		ActionBar ab = getSupportActionBar();
+		//no pongo título en la ActionBar
 		ab.setDisplayShowTitleEnabled(false);
 		
 		mMainFragment = (MainFragment) getFragmentManager().findFragmentById(R.id.main_fragment);	
@@ -71,6 +72,7 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 	    		new MenuItemCompat.OnActionExpandListener() {
 	    		@Override
 	    		public boolean onMenuItemActionExpand(MenuItem item) {
+	    			//colocar el foco en la caja de texto para que aparezca el teclado
 	    			mTxtSearch.requestFocus();
 	    		return true;
 	    		}
@@ -88,7 +90,7 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 			
 			@Override
 			public void onClick(View v) {
-				
+				//al pulsar en el botón de búsqueda de la actionbar, realizar la búsqueda
 				searchRSS();
 			}
 		});
@@ -99,6 +101,7 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+		        	//al pulsar en el botón de búsqueda del softkeyboard, realizar la búsqueda
 		        	searchRSS();
 		            return true;
 		        }
@@ -112,10 +115,12 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 		    	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		    	
 		        if (hasFocus) {
+		        	//mostrar el teclado al ganar el foco
 		        	imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 		        }
 		        else
 		        {
+		        	//ocultar el teclado al perder el foco
 		        	imm.hideSoftInputFromWindow(mTxtSearch.getWindowToken(),0); 
 		        }
 		    }
@@ -134,6 +139,7 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 	           // openSearch();
 	            return true;
 	        case R.id.action_settings:
+	        	//abrir la actividad de las preferencias, donde guardo el proveedor rss actual
 	           openSettings();
 	            return true;
 	        default:
@@ -147,12 +153,16 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 		
 		if (requestCode == PREFERENCE_REQUEST) {
 			 if (resultCode == RESULT_OK) {
+				 //cargar las rss del nuevo proveedor
 				 mMainFragment.loadRSS();
 			 }
 		}
 	}
 	
-	
+	/**Abre la actividad de Preferencias
+	 *
+	 * @return     
+	 */
 	private void openSettings(){
 		Intent _intent = new Intent(this, PrefActivity.class);
 		this.startActivityForResult(_intent, PREFERENCE_REQUEST);
@@ -163,6 +173,7 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 		
 		if(mFlContent!=null)
 		{
+			//en el caso de tablets, añadir a la derecha de la pantalla el detalle de la rss seleccionada
 			final FragmentManager fm = getFragmentManager();
 
 			FragmentTransaction ft = fm.beginTransaction();
@@ -174,6 +185,7 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 			ft.commit();
 		}
 		else{
+			//en el caso de móviles, abrir un nuevo formulario con el detalle de la rss seleccionada
 			Intent _intent = new Intent(this, DetalleActivity.class);
 			_intent.putExtra(DetalleActivity.REQUEST_PARAM_ITEM, item);
 	
@@ -188,12 +200,16 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 	public void onHasRss(boolean hasRSS) {
 		if (mSearchItem!=null)
 		{
-			//si no ha y resultados , ocultar el menu de búsqueda
+			//si no hay resultados , ocultar el menu de búsqueda
 			mSearchItem.setVisible(hasRSS);
 		}
 	}
 	
 	
+	/**Actualiza el listado del fragment principal con el nuevo criterio de búsqueda
+	 *
+	 * @return     
+	 */
 	private void searchRSS(){
 		if(mFlContent!=null)
 		{
@@ -207,10 +223,12 @@ public class MainActivity extends ActionBarActivity  implements MainFragment.OnI
 			
 			ft.commit();
 		}
+		
+		//ocultar el panel de búsqueda de la actionbar
 		mSearchItem.collapseActionView();
 		
 		
-		
+		//actualizar el fragment principal con las rss que cumplen con el nuevo criterio de búsqueda
 		mMainFragment.search(mTxtSearch.getText().toString());
 	}
 

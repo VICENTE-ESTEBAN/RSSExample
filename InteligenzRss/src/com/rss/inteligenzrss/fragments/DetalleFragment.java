@@ -101,6 +101,11 @@ public class DetalleFragment extends Fragment{
 		outState.putParcelable(DetalleFragment.REQUEST_PARAM_ITEM, mItem);
 	}
 
+	/**
+	 * Rellena los controles con los datos
+	 *
+	 * @return     
+	 */
 	private void fillControls(){
 		TextView _txtTitulo  = (TextView) getView().findViewById(R.id.txtTitulo);
 		final TextView  _txtDescripcion = (TextView) getView().findViewById(R.id.txtDescripcion);
@@ -118,6 +123,7 @@ public class DetalleFragment extends Fragment{
 					Context _context = getActivity();
 					if(_context!=null)
 					{
+						//mostrar el detalle de la rss en el navegador 
 						if(Util.isConnected(_context))
 						{
 							try {
@@ -157,6 +163,7 @@ public class DetalleFragment extends Fragment{
 
 			@Override
 			public void run() {
+				//mostrar la descripción en html
 				_txtDescripcion.setText(Html.fromHtml(mItem.getDescription()));
 			}        	
 		});
@@ -164,6 +171,7 @@ public class DetalleFragment extends Fragment{
 
 		if(!TextUtils.isEmpty(mItem.getUrlImage()))
 		{
+			//mostrar la imagen
 			mThumbnailTask = new ThumbnailTask();
 			mThumbnailTask.execute(mItem.getUrlImage());
 		}
@@ -201,11 +209,13 @@ public class DetalleFragment extends Fragment{
 
 			Bitmap bmpFoto = null;
 
+			//comprobar que existe la imagen en la sd
 			if (Util.existsBitmapInSD(_context, _fileName))
 			{
 				if (this.isCancelled())
 					return null;
 
+				//obtener la imagen con las dimensiones que necesitamos
 				bmpFoto = Util.getBitmapFromSD(
 						getActivity(),  
 						_fileName, 
@@ -213,15 +223,18 @@ public class DetalleFragment extends Fragment{
 						getResources().getDimensionPixelSize(R.dimen.imagen_ficha_detalle_height));
 			}
 			else{				
+				//si no existe, descargarla
 				bmpFoto = Util.downloadImageBitmap(_context, _url);
 
 				if (bmpFoto != null) {
 
+					//grabar la imagen en la sd
 					Util.SaveBitmapToSD(_context, _fileName, bmpFoto , Bitmap.CompressFormat.PNG);
 
 					bmpFoto.recycle();
 					bmpFoto = null;
 
+					//obtener la imagen con las dimensiones que necesitamos en el listado
 					bmpFoto = Util.getBitmapFromSD(
 							_context, 
 							_fileName, 

@@ -81,12 +81,14 @@ public class XmlRssAdapter extends BaseAdapter{
 		holder.txtTitulo.setText(_item.getTitle());
 		
 		
+		
+		
+		//en principio deberá poner el detalle de la noticia en 2 líneas, pero es html...como pongo resumo en 2 lineas ese html...
+		//si me decis como lo quereis lo modifico
+		holder.txtDescripcion.setText("");	
 		//holder.txtDescripcion.setText(Html.fromHtml(_item.getDescription()));	
 		
-		
-		holder.txtDescripcion.setText("");	
-			
-		
+		//si hay imagen mostrarla
 		if (!TextUtils.isEmpty(_item.getUrlImage()))
 		{
 			
@@ -98,6 +100,7 @@ public class XmlRssAdapter extends BaseAdapter{
 		}
 
 		
+		//modificar el color de la celda del listado si es par o impar
 		if (position%2==0)
 			convertView.setBackgroundColor(Color.parseColor("#7DADD8E6"));
 		else
@@ -148,11 +151,13 @@ public class XmlRssAdapter extends BaseAdapter{
 			final String _fileName = String.valueOf(url.hashCode());
 
 			Bitmap bmpFoto = null;
+			//comprobar si existe en la sd
 			if (Util.existsBitmapInSD(mContext, _fileName))
 			{
 				if (this.isCancelled())
 					return null;
 
+				//obtener la imagen con las dimensiones que necesitamos en el listado
 				bmpFoto = Util.getBitmapFromSD(
 						mContext,  
 						_fileName, 
@@ -160,10 +165,11 @@ public class XmlRssAdapter extends BaseAdapter{
 						mContext.getResources().getDimensionPixelSize(R.dimen.imagen_listado_height));
 			}
 			else{
+				//descargar de internet la imagen
 				bmpFoto = Util.downloadImageBitmap(mContext, url);
 
 				if (bmpFoto != null) {
-
+					//grabar la imagen en la sd
 					Util.SaveBitmapToSD(mContext, _fileName, bmpFoto , Bitmap.CompressFormat.PNG);
 
 					bmpFoto.recycle();
@@ -172,6 +178,7 @@ public class XmlRssAdapter extends BaseAdapter{
 					if (this.isCancelled())
 						return null;
 
+					//obtener la imagen con las dimensiones que necesitamos en el listado
 					bmpFoto = Util.getBitmapFromSD(
 							mContext, 
 							_fileName, 
@@ -189,7 +196,7 @@ public class XmlRssAdapter extends BaseAdapter{
 			super.onPostExecute(bitmap);
 
 
-			//you can check if the target row for the view is still the same when the async operation finishes
+			//comprobar que la posicion del listitem sigue siendo la misma para mostrar la imagen
 			if (holder.position == position && bitmap!=null) {				
 
 				holder.imgImage.setImageBitmap(bitmap);

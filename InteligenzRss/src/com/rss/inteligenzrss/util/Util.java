@@ -27,6 +27,13 @@ public class Util {
 
 	private static final String TAG = Util.class.getSimpleName();
 
+	/**
+	 * Comprueba si existe el fichero en el disco
+	 *
+	 * @param  context  Context actual de la aplicación
+	 * @param  fileName Nombre del fichero
+	 * @return      El fichero existe o no 
+	 */
 	public static boolean existsBitmapInSD(Context context, String fileName){
 
 		//buscar en el directorio normal
@@ -50,7 +57,16 @@ public class Util {
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Devuelve el fichero bitmap si existe
+	 *
+	 * @param  context  Context actual de la aplicación
+	 * @param  fileName Nombre del fichero
+	 * @param reqWidth Width a la que se devolverá la imagen
+	 * @param reqHeight Height a la que se devolverá la imagen
+	 * @return      el fichero Bitmap
+	 */
 	public static Bitmap getBitmapFromSD(Context context, String fileName, Integer reqWidth, Integer reqHeight){
 
 		Bitmap bitmap = null;
@@ -119,6 +135,15 @@ public class Util {
 		return bitmap;
 	}
 
+	/**
+	 * Graba un fichero bitmap
+	 *
+	 * @param  context  Context actual de la aplicación
+	 * @param  fileName Nombre del fichero
+	 * @param  imagen   Bitmap que se va a grabar
+	 * @param formatToCompress formato en el que se va a grabar el bitmap
+	 * @return      La grabación ha tenido exito o no
+	 */
 	public static boolean SaveBitmapToSD( Context context, String fileName, Bitmap imagen, Bitmap.CompressFormat formatToCompress){
 
 		boolean _isOK = true;
@@ -178,6 +203,14 @@ public class Util {
 		return _isOK;
 	}
 
+	/**
+	 * Calcula la relación para obtener la imagen en modo sample
+	 *
+	 * @param  options  Parámetro para obtener la dimension actual del bitmap
+	 * @param  reqWidth width buscada
+	 * @param  reqHeight   height buscada
+	 * @return      Relación para obtener la imagen en modo sample
+	 */
 	private static int calculateInSampleSize(BitmapFactory.Options options,
 			int reqWidth, int reqHeight) {
 
@@ -200,6 +233,13 @@ public class Util {
 	}
 	
 	
+	/**
+	 * Borra un fichero
+	 *
+	 * @param  context  Contexto actual
+	 * @param  fileName nombre del fichero
+	 * @return  
+	 */
 	public static void deletefile(Context context, String fileName){
 		if(context!=null)
 		{
@@ -211,7 +251,13 @@ public class Util {
 		}
 		
 	}
-
+	/**
+	 * Devuelve el contenido de un fichero de texto
+	 *
+	 * @param  context  Contexto actual
+	 * @param  fileName nombre del fichero
+	 * @return  el contenido de un fichero de texto
+	 */
 	public static String getStringFromSD(Context context, String fileName){
 
 		String _content = null;
@@ -247,6 +293,14 @@ public class Util {
 
 	}
 
+	/**
+	 * Graba una cadena de texto en un fichero
+	 *
+	 * @param  context  Contexto actual
+	 * @param  stringToSave cadena de texto que se va a grabar
+	 * @param  fileName nombre del fichero
+	 * @return  
+	 */
 	public static void SaveStringToSD(Context context, String stringToSave, String fileName){
 
 
@@ -307,6 +361,11 @@ public class Util {
 	}
 
 
+	/** Comprueba si el móvil tiene algun modo de conexión activado
+	 *
+	 * @param  context  Contexto actual
+	 * @return  DEvuelve si el móvil tiene algun modo de conexión activado 
+	 */
 	public static boolean isConnected(Context context) {
 		boolean mIsConnected = false;
 		if(context!=null)
@@ -332,6 +391,14 @@ public class Util {
 
 
 	}
+	
+	
+	/**Descarga una imagen de internet
+	 *
+	 * @param  context  Contexto actual
+	 * @param  url Url desde donde se va a descargar
+	 * @return      Bitmap descargado
+	 */
 	public static Bitmap downloadImageBitmap(Context context, String url) {
 		Bitmap bmp = null;
 		if (Util.isConnected(context))
@@ -386,6 +453,12 @@ public class Util {
 		return bmp;
 	}
 
+	/** Convierte el flujo de entrada en una cadena de caracteres
+	 *
+	 * @param  is  Stream de datos
+
+	 * @return Cadena del flujo de datos
+	 */
 	public static String StreamToString(final InputStream is) {
 		final char[] buffer = new char[1024];
 		final StringBuilder out = new StringBuilder();

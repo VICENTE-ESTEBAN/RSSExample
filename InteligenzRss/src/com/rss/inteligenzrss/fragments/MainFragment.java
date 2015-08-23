@@ -40,8 +40,10 @@ import com.rss.inteligenzrss.util.Util;
 public class MainFragment extends ListFragment{
 	private static final String TAG = MainFragment.class.getSimpleName();
 
-	private String FILE_LASTREQUEST_JSON = "LastRequest_json";
-	private String FILE_LASTREQUEST_XML = "LastRequest_xml";
+	//nombre del fichero donde se va a grabar la última petición realizada en formato json
+	private final String FILE_LASTREQUEST_JSON = "LastRequest_json";
+	//nombre del fichero donde se va a grabar la última petición realizada en formato xml
+	private final String FILE_LASTREQUEST_XML = "LastRequest_xml";
 
 	FrameLayout  mFlProgress;
 
@@ -77,6 +79,8 @@ public class MainFragment extends ListFragment{
 		super.onAttach(activity);
 
 		if (activity instanceof OnItemSelectedListener) {
+			//la actividad debe implementar OnItemSelectedListener, para que al seleccionar una rss, 
+			//comunicarnos con la actividad y poder mostrar la rss selecionada
 			mlistener = (OnItemSelectedListener) activity;
 		} else {
 			throw new ClassCastException(activity.toString() + " debe implementar MainFragment.OnItemSelectedListener");
@@ -100,7 +104,10 @@ public class MainFragment extends ListFragment{
 		Item _itemSelected = _adapter.getItem(pos);
 
 		if (mlistener!=null)
+		{
+			//comunicar al listener la rss seleccionada
 			mlistener.onRssItemSelected(_itemSelected);
+		}
 
 
 	}
@@ -142,19 +149,6 @@ public class MainFragment extends ListFragment{
 		View view  = inflater.inflate(R.layout.fragment_main, container, false);
 
 		mFlProgress = (FrameLayout) view.findViewById(R.id.flProgress);
-		//mTxtSearch = (EditText) view.findViewById(R.id.txtSearch);
-		//mBtnSearch = (Button) view.findViewById(R.id.btnSearch);
-		//mRlSearch = (RelativeLayout) view.findViewById(R.id.rlSearch);
-
-		/*	mBtnSearch.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				new SearchTask().execute();
-			}
-		});
-		mRlSearch.setVisibility(View.GONE);*/
 
 		internalLoadRSS(true);
 
@@ -162,6 +156,7 @@ public class MainFragment extends ListFragment{
 	}
 
 	public void loadRSS(){
+		//cargar y mostrar los datos de las rss del proveedor actual
 		internalLoadRSS(false);
 	}
 	private void internalLoadRSS(boolean loadLastRequest){
@@ -173,12 +168,13 @@ public class MainFragment extends ListFragment{
 		{
 			if(Util.isConnected(_context))
 			{
+				//obtener el proveedor actual de las preferencias
 				SharedPreferences _sharedPreference = PreferenceManager.getDefaultSharedPreferences(_context);
-
+				
 				String _defaultValue = getResources().getString(R.string.PreferenceDefault);
 				String _newPreference = _sharedPreference.getString("PREF_LIST", _defaultValue);
 
-				//String _url = "http://www.xatakandroid.com/tag/feeds/rss2.xml";
+				//comprobar el formato XML/JSON del proveedor de rss
 				if(_newPreference.indexOf("[XML]---")!=-1)
 				{        		
 					String _url = _newPreference.replace("[XML]---", "");
@@ -190,20 +186,24 @@ public class MainFragment extends ListFragment{
 				{
 
 					String _url = _newPreference.replace("[JSON]---","");
-
+					//JSON
 					mDownloadJsonTask = new DownloadJSONTask();		
 					mDownloadJsonTask.execute(_url);
 				}
 			}
 			else
 			{
+				//cargar los datos grabados con la última petición o simplemente mostrar un toast indicando que no se pudieron cargar los datos
 				if(loadLastRequest)
 				{
-					//leer la última petición
+					//leer la última petición grabada en formato json
 					String _lastRequest = Util.getStringFromSD(_context, FILE_LASTREQUEST_JSON);
 					List<Item> _items = null;
+					
+					//existe una petición grabada json
 					if(!TextUtils.isEmpty(_lastRequest))
 					{
+						//parsear la última petición con el parser json
 						ParserRssJson _parser = new ParserRssJson();
 						try {
 							_items = _parser.parse(_lastRequest);
@@ -214,10 +214,12 @@ public class MainFragment extends ListFragment{
 					}
 					else
 					{
+						//leer la última petición grabada en formato xml
 						_lastRequest = Util.getStringFromSD(_context, FILE_LASTREQUEST_XML);		
-	
+						//existe una petición grabada xml
 						if(!TextUtils.isEmpty(_lastRequest))
 						{
+							//parsear la última petición con el parser xml
 							ParserRssXml _parser = new ParserRssXml();
 							try {
 								_items = _parser.parse(_lastRequest);
@@ -240,6 +242,7 @@ public class MainFragment extends ListFragment{
 	
 					if(_items==null)
 					{
+						//no se ha podido descargar ninguna rss ni existe ninguna grabada. Comunicarselo al usuario
 						AlertDialog.Builder builder = new AlertDialog.Builder(_context);
 						builder.setMessage(getResources().getString(R.string.errorConexion));
 	
@@ -259,7 +262,7 @@ public class MainFragment extends ListFragment{
 					}
 					else
 					{
-	
+						//existen datos grabados. Mostrarselos al usuario e indicarselo con un Toast
 						loadListView(_context , _items);
 	
 						Toast toast = Toast.makeText(_context, getResources().getString(R.string.ErrorConCarga), Toast.LENGTH_LONG);
@@ -268,6 +271,7 @@ public class MainFragment extends ListFragment{
 				}
 				else
 				{
+					
 					Toast toast = Toast.makeText(_context, getResources().getString(R.string.errorConexion), Toast.LENGTH_LONG);
 					toast.show();
 				}
@@ -310,6 +314,7 @@ public class MainFragment extends ListFragment{
 					{
 						_stream = conn.getInputStream();
 
+						//cargar la cadena xml obtenida
 						String _xml = Util.StreamToString(_stream); 
 
 						ParserRssXml _parser = new ParserRssXml();
@@ -318,7 +323,7 @@ public class MainFragment extends ListFragment{
 						//grabar la última respuesta
 						Util.SaveStringToSD(_context, _xml, FILE_LASTREQUEST_XML);
 
-						//borrar el anterior fichero JSON si existe
+						//borrar el anterior fichero JSON si existe para que sólo existe un fichero con la última petición
 						Util.deletefile(_context, FILE_LASTREQUEST_JSON);
 					}
 				}
@@ -348,6 +353,7 @@ public class MainFragment extends ListFragment{
 			if(_context!=null)
 			{
 
+				//cargar los datos en el listview
 				loadListView(_context , items);
 			}
 		}
@@ -400,7 +406,7 @@ public class MainFragment extends ListFragment{
 						//grabar la última respuesta
 						Util.SaveStringToSD(_context, _json, FILE_LASTREQUEST_JSON);
 
-						//borrar el anterior fichero XML si existe
+						//borrar el anterior fichero XML si existe  para que sólo existe un fichero con la última petición
 						Util.deletefile(_context, FILE_LASTREQUEST_XML);
 					}
 				}
@@ -430,16 +436,22 @@ public class MainFragment extends ListFragment{
 
 			if(_context!=null)
 			{
-
+				//cargar los datos en el listview
 				loadListView(_context , items);
 			}
 		}
 
 	}
 
-
+	/**
+	 * Realiza la búsqueda sobre el título en la colección de rss actuales 
+	 *
+	 * @param  criteria  Criterio con el que se va a comparar el título de la rss
+	 * @return     
+	 */
 	public void search(String criteria)
 	{
+		//realizar la búsqueda con el criterio pasado como parámetro
 		if (mSearchTask!=null 
 				&& mSearchTask.getStatus() != AsyncTask.Status.FINISHED)
 			mSearchTask.cancel(true);
@@ -500,8 +512,9 @@ public class MainFragment extends ListFragment{
 
 			if(_context!=null && !this.isCancelled())
 			{
+				
+				//rellenar el listview con las rss filtradas
 				ListAdapter _adapter = new XmlRssAdapter(_context, result);
-				// Bind to our new adapter.
 				setListAdapter(_adapter);
 
 				mFlProgress.setVisibility(View.GONE);
@@ -510,25 +523,32 @@ public class MainFragment extends ListFragment{
 
 	}
 
-
+	/**
+	 * Carga e listview con los datos que se le pasan como parámetro
+	 *
+	 * @param  _items  Items con los que se va a rellenar el listado
+	 * @return     
+	 */
 	private void loadListView(Context context , List<Item> _items){
 		if(context!=null)
 		{
 			boolean _hasResults = _items.size()>0;
 			if(_hasResults)
 			{
-				//mRlSearch.setVisibility(View.VISIBLE);
+				//eliminar el color opaco inicial y poner un fondo transparente al framelayout, para que se vea el progressbar
+				//y los controles inferiores en posteriores operaciones de actualización del listview
 				mFlProgress.setBackgroundColor(Color.TRANSPARENT);
 			}
 
 			if (mlistener!=null)
 			{
+				//indicar al listener si el listview tiene o no resultados
 				mlistener.onHasRss(_hasResults);
 			}
 
 
+			//rellenar el listview
 			ListAdapter _adapter = new XmlRssAdapter(context, _items);
-			// Bind to our new adapter.
 			setListAdapter(_adapter);		
 
 			mFlProgress.setVisibility(View.GONE);
