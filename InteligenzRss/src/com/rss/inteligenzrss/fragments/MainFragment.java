@@ -40,9 +40,9 @@ import com.rss.inteligenzrss.util.Util;
 public class MainFragment extends ListFragment{
 	private static final String TAG = MainFragment.class.getSimpleName();
 
-	//nombre del fichero donde se va a grabar la ï¿½ltima peticiï¿½n realizada en formato json
+	//nombre del fichero donde se va a grabar la última petición realizada en formato json
 	private final String FILE_LASTREQUEST_JSON = "LastRequest_json";
-	//nombre del fichero donde se va a grabar la ï¿½ltima peticiï¿½n realizada en formato xml
+	//nombre del fichero donde se va a grabar la última petición realizada en formato xml
 	private final String FILE_LASTREQUEST_XML = "LastRequest_xml";
 
 	FrameLayout  mFlProgress;
@@ -193,17 +193,17 @@ public class MainFragment extends ListFragment{
 			}
 			else
 			{
-				//cargar los datos grabados con la ï¿½ltima peticiï¿½n o simplemente mostrar un toast indicando que no se pudieron cargar los datos
+				//cargar los datos grabados con la última petición o simplemente mostrar un toast indicando que no se pudieron cargar los datos
 				if(loadLastRequest)
 				{
-					//leer la ï¿½ltima peticiï¿½n grabada en formato json
+					//leer la última petición grabada en formato json
 					String _lastRequest = Util.getStringFromSD(_context, FILE_LASTREQUEST_JSON);
 					List<Item> _items = null;
 					
-					//existe una peticiï¿½n grabada json
+					//existe una petición grabada json
 					if(!TextUtils.isEmpty(_lastRequest))
 					{
-						//parsear la ï¿½ltima peticiï¿½n con el parser json
+						//parsear la última petición con el parser json
 						ParserRssJson _parser = new ParserRssJson();
 						try {
 							_items = _parser.parse(_lastRequest);
@@ -214,20 +214,16 @@ public class MainFragment extends ListFragment{
 					}
 					else
 					{
-						//leer la ï¿½ltima peticiï¿½n grabada en formato xml
+						//leer la última petición grabada en formato xml
 						_lastRequest = Util.getStringFromSD(_context, FILE_LASTREQUEST_XML);		
-						//existe una peticiï¿½n grabada xml
+						//existe una petición grabada xml
 						if(!TextUtils.isEmpty(_lastRequest))
 						{
-							//parsear la ï¿½ltima peticiï¿½n con el parser xml
+							//parsear la última petición con el parser xml
 							ParserRssXml _parser = new ParserRssXml();
 							try {
 								_items = _parser.parse(_lastRequest);
-							}
-							catch (IOException e1){
-								if (e1.getMessage() != null && !e1.getMessage().isEmpty())
-									Log.e(TAG, e1.getMessage(), e1);
-							} catch (XmlPullParserException ex) {
+							} catch (XmlPullParserException | IOException ex) {		
 								if (ex.getMessage() != null && !ex.getMessage().isEmpty())
 									Log.e(TAG, ex.getMessage(), ex);
 							}	
@@ -324,10 +320,10 @@ public class MainFragment extends ListFragment{
 						ParserRssXml _parser = new ParserRssXml();
 						_items = _parser.parse(_xml);
 
-						//grabar la ï¿½ltima respuesta
+						//grabar la última respuesta
 						Util.SaveStringToSD(_context, _xml, FILE_LASTREQUEST_XML);
 
-						//borrar el anterior fichero JSON si existe para que sï¿½lo existe un fichero con la ï¿½ltima peticiï¿½n
+						//borrar el anterior fichero JSON si existe para que sólo existe un fichero con la última petición
 						Util.deletefile(_context, FILE_LASTREQUEST_JSON);
 					}
 				}
@@ -407,10 +403,10 @@ public class MainFragment extends ListFragment{
 						_items = _parser.parse(_json);
 
 
-						//grabar la ï¿½ltima respuesta
+						//grabar la última respuesta
 						Util.SaveStringToSD(_context, _json, FILE_LASTREQUEST_JSON);
 
-						//borrar el anterior fichero XML si existe  para que sï¿½lo existe un fichero con la ï¿½ltima peticiï¿½n
+						//borrar el anterior fichero XML si existe  para que sólo existe un fichero con la última petición
 						Util.deletefile(_context, FILE_LASTREQUEST_XML);
 					}
 				}
@@ -448,14 +444,14 @@ public class MainFragment extends ListFragment{
 	}
 
 	/**
-	 * Realiza la bï¿½squeda sobre el tï¿½tulo en la colecciï¿½n de rss actuales 
+	 * Realiza la búsqueda sobre el título en la colección de rss actuales 
 	 *
-	 * @param  criteria  Criterio con el que se va a comparar el tï¿½tulo de la rss
+	 * @param  criteria  Criterio con el que se va a comparar el título de la rss
 	 * @return     
 	 */
 	public void search(String criteria)
 	{
-		//realizar la bï¿½squeda con el criterio pasado como parï¿½metro
+		//realizar la búsqueda con el criterio pasado como parámetro
 		if (mSearchTask!=null 
 				&& mSearchTask.getStatus() != AsyncTask.Status.FINISHED)
 			mSearchTask.cancel(true);
@@ -487,7 +483,7 @@ public class MainFragment extends ListFragment{
 
 				_items = new ArrayList<Item>();
 
-				//buscar los items cuyo tï¿½tulo contiene esa cadena
+				//buscar los items cuyo título contiene esa cadena
 				for (Item _item:mItems)
 				{
 					if (_item.getTitle().toLowerCase().indexOf(_criteria)!=-1)
@@ -528,7 +524,7 @@ public class MainFragment extends ListFragment{
 	}
 
 	/**
-	 * Carga e listview con los datos que se le pasan como parï¿½metro
+	 * Carga e listview con los datos que se le pasan como parámetro
 	 *
 	 * @param  _items  Items con los que se va a rellenar el listado
 	 * @return     
@@ -540,7 +536,7 @@ public class MainFragment extends ListFragment{
 			if(_hasResults)
 			{
 				//eliminar el color opaco inicial y poner un fondo transparente al framelayout, para que se vea el progressbar
-				//y los controles inferiores en posteriores operaciones de actualizaciï¿½n del listview
+				//y los controles inferiores en posteriores operaciones de actualización del listview
 				mFlProgress.setBackgroundColor(Color.TRANSPARENT);
 			}
 
