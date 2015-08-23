@@ -67,10 +67,7 @@
 					<showWarnings>true</showWarnings>
 					<executable>${env.JAVA_HOME}/bin/javac</executable>
 					<fork>true</fork>
-						<sdk>
-                        <!-- platform as api level (api level 19 = platform 4.2)-->
-			            <platform>19</platform>
-			          </sdk>
+						
 				</configuration>
 			</plugin>
 		</plugins>
