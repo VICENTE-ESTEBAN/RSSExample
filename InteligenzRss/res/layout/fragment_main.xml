@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rss.inteligenzrss.MainActivity" 
+    
+    android:background="#fff">
+    
+  
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
+    
+    
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="#fff"
+        android:gravity="center"
+        android:text="@string/NoRSSResults"/>
+    
+    <FrameLayout 
+        android:id="@+id/flProgress"
+        
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        
+        android:background="#fff">
+        
+         <ProgressBar
+            android:id="@+id/pbItemProgress"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:indeterminateOnly="true" />
+         
+    </FrameLayout>
+
+</RelativeLayout>

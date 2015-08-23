@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Inteligenz Rss</string>
+      
+    <string name="errorConexion">Verifique el estado de su conexión</string>
+    <string name="ErrorConCarga">No hay conexión. Se ha cargado la última petición</string>
+ 	
+    <string name="NoRSSResults">No se encontró ninguna RSS</string>
+    
+    <string name="VerRssNavegador">Ver en el navegador</string>
+    
+    
+    <string name="URLIncorrecta">No se puede abrir esa url</string>
+ 	<string name="Search">Buscar</string>
+ 	<string name="action_search">Buscar</string>
+ 	<string name="action_settings">Settings</string>
+ 	<string name="OK">OK</string>
+ 	
+ 	<string name="PreferenceCategoryTitle">Proveedores RSS</string>
+ 	<string name="PreferenceTitle">Seleccione un proveedor RSS</string>
+ 	<string name="PreferenceSummary">Proveedor actual: </string>
+ 	
+ 	
+ 	<string name="PreferenceDefault">[XML]---http://www.xatakandroid.com/tag/feeds/rss2.xml</string>
+ 	<string name="KEY_PREFERENCE">PREF_LIST</string>
+   
+</resources>

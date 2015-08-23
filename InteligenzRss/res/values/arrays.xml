@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listEntries">
+        <item>Xataka Android</item>
+        <item>Stackoverflow</item>
+        <item>Digg</item>
+        <item>Javatechig Android</item>
+    </string-array>
+    
+     <string-array name="listValues">
+        <item>@string/PreferenceDefault</item>
+        <item>[XML]---http://stackoverflow.com/feeds/tag?tagnames=android&amp;sort=newest</item>
+        <item>[JSON]---https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&amp;q=http://www.digg.com/rss/index.xml</item>
+        <item>[JSON]---http://javatechig.com/api/get_category_posts/?dev=1&amp;slug=android</item>
+    </string-array>
+</resources>

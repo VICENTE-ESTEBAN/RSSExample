@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="#ffc">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true" >
+
+        <RelativeLayout          
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            
+            <RelativeLayout          
+                 android:id="@+id/rlHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            
+            android:background="#7DADD8E6">
+            
+                
+            
+            <TextView
+                android:id="@+id/txtTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/imgImage"
+                android:layout_toStartOf="@+id/imgImage"
+                
+               android:textColor="#000"
+                android:textStyle="bold" 
+                android:textSize="18sp"
+                
+                android:layout_alignParentTop="true"
+                
+                android:gravity="left"/>
+
+          
+            <Button 
+                android:id="@+id/btnVerRssNavegador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                
+                android:text="@string/VerRssNavegador"
+                
+                 android:layout_alignParentLeft="true"
+                 android:layout_alignParentStart="true"
+                 
+                 android:layout_below="@+id/txtTitulo"
+
+                >
+                
+            </Button>
+            <ImageView
+                android:id="@+id/imgImage"
+                android:layout_width="@dimen/imagen_ficha_detalle_width"
+                android:layout_height="@dimen/imagen_ficha_detalle_height"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+              <TextView
+                android:id="@+id/txtDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlHeader"
+                
+                android:textColor="#000"
+                android:background="#7DC0C0C0"/>
+            
+        </RelativeLayout>
+    </ScrollView>
+
+</FrameLayout>

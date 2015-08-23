@@ -1,0 +1,11 @@
+<resources>
+
+
+    <dimen name="imagen_listado_width">120dp</dimen>
+    <dimen name="imagen_listado_height">120dp</dimen>
+    
+    
+     <dimen name="imagen_ficha_detalle_width">220dp</dimen>
+    <dimen name="imagen_ficha_detalle_height">220dp</dimen>
+
+</resources>
