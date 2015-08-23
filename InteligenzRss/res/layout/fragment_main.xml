@@ -7,11 +7,16 @@
     android:background="#fff">
     
   
+    <include 
+         android:id="@+id/toolBar"
+        layout="@layout/search_action"/>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolBar"
+        />
     
     
     
@@ -23,7 +28,9 @@
 
         android:background="#fff"
         android:gravity="center"
-        android:text="@string/NoRSSResults"/>
+        android:text="@string/NoRSSResults"
+        
+        android:layout_below="@+id/toolBar"/>
     
     <FrameLayout 
         android:id="@+id/flProgress"

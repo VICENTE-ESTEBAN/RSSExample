@@ -22,12 +22,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rss.inteligenzrss.R;
@@ -45,23 +52,26 @@ public class MainFragment extends ListFragment{
 	//nombre del fichero donde se va a grabar la última petición realizada en formato xml
 	private final String FILE_LASTREQUEST_XML = "LastRequest_xml";
 
-	FrameLayout  mFlProgress;
+	private FrameLayout  mFlProgress;
+	private EditText mTxtSearch;
+	private ImageView mBtnSearch;
+	private ImageView mBtnSettings;
+	private List<Item> mItems = null;
 
-
-	List<Item> mItems = null;
-
-	SearchTask mSearchTask = null;
+	private SearchTask mSearchTask = null;
 
 	private OnItemSelectedListener mlistener = null;
 	public interface OnItemSelectedListener {
-		public void onRssItemSelected(Item item);
-		public void onHasRss(boolean hasRSS);
+		public void onRssItemSelected(Item item);	
+		public void onOpenSettings();
+		public void onSearch();
 	}
 
 
 
 	private DownloadJSONTask mDownloadJsonTask = null;
 	private DownloadXmlTask mDownloadXmlTask = null;
+
 
 	public static MainFragment newInstance() { 
 
@@ -114,7 +124,6 @@ public class MainFragment extends ListFragment{
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 
 		if(getActivity().isFinishing())
@@ -150,11 +159,51 @@ public class MainFragment extends ListFragment{
 
 		mFlProgress = (FrameLayout) view.findViewById(R.id.flProgress);
 
+		mBtnSettings= (ImageView)view.findViewById(R.id.btnSettings);
+		mBtnSettings.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//abrir la pantalla de settings
+				if (mlistener!=null)
+					mlistener.onOpenSettings();
+			}
+		});
+		
+		mBtnSearch = (ImageView)view.findViewById(R.id.btnSearch);
+		mBtnSearch.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//al pulsar en el botón de búsqueda de la actionbar, realizar la búsqueda
+				searchRSS();
+			}
+		});
+		mTxtSearch = (EditText)view.findViewById(R.id.txtSearch);
+	
+		mTxtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		    @Override
+		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+		        	//al pulsar en el botón de búsqueda del softkeyboard, realizar la búsqueda
+		        	searchRSS();
+		            return true;
+		        }
+		        return false;
+		    }
+		});
+		
+
 		internalLoadRSS(true);
 
 		return view;
 	}
 
+	
+	public void clearSearchText(){
+		this.mTxtSearch.setText("");
+	}
+	
 	public void loadRSS(){
 		//cargar y mostrar los datos de las rss del proveedor actual
 		internalLoadRSS(false);
@@ -445,12 +494,17 @@ public class MainFragment extends ListFragment{
 
 	/**
 	 * Realiza la búsqueda sobre el título en la colección de rss actuales 
-	 *
-	 * @param  criteria  Criterio con el que se va a comparar el título de la rss
 	 * @return     
 	 */
-	public void search(String criteria)
+	private void searchRSS()
 	{
+		InputMethodManager imm = (InputMethodManager) ((Activity)getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
+    	//ocultar el teclado al perder el foco
+		imm.hideSoftInputFromWindow(mTxtSearch.getWindowToken(),0); 
+       
+        
+		String criteria =  mTxtSearch.getText().toString();
+		
 		//realizar la búsqueda con el criterio pasado como parámetro
 		if (mSearchTask!=null 
 				&& mSearchTask.getStatus() != AsyncTask.Status.FINISHED)
@@ -512,10 +566,12 @@ public class MainFragment extends ListFragment{
 
 			if(_context!=null && !this.isCancelled())
 			{
-				
-				//rellenar el listview con las rss filtradas
+				if(mlistener!=null)
+					mlistener.onSearch();
+
+				//rellenar el listview
 				ListAdapter _adapter = new XmlRssAdapter(_context, result);
-				setListAdapter(_adapter);
+				setListAdapter(_adapter);		
 
 				mFlProgress.setVisibility(View.GONE);
 			}
@@ -526,6 +582,7 @@ public class MainFragment extends ListFragment{
 	/**
 	 * Carga e listview con los datos que se le pasan como parámetro
 	 *
+	 * * @param  context  contexto actual
 	 * @param  _items  Items con los que se va a rellenar el listado
 	 * @return     
 	 */
@@ -540,12 +597,8 @@ public class MainFragment extends ListFragment{
 				mFlProgress.setBackgroundColor(Color.TRANSPARENT);
 			}
 
-			if (mlistener!=null)
-			{
-				//indicar al listener si el listview tiene o no resultados
-				mlistener.onHasRss(_hasResults);
-			}
-
+			if(mlistener!=null)
+				mlistener.onSearch();
 
 			//rellenar el listview
 			ListAdapter _adapter = new XmlRssAdapter(context, _items);
@@ -556,4 +609,6 @@ public class MainFragment extends ListFragment{
 			mItems = _items;
 		}
 	}
+	
+	
 }

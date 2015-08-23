@@ -27,17 +27,16 @@ import com.rss.inteligenzrss.util.Util;
 public class DetalleFragment extends Fragment{
 	private static final String TAG = DetalleFragment.class.getSimpleName();
 
+	
+	private static String REQUEST_PARAM_ITEM = "itemFragment";
+	private ThumbnailTask mThumbnailTask;
+	private ImageView mImgImage;
+	private Item mItem = null;
+	
 	public interface OnItemSelectedListener {
 		public void onRssItemSelected(Item item);
 	}
-
-
-	//private static final String TAG = DetalleFragment.class.getSimpleName();
-
-	private static String REQUEST_PARAM_ITEM = "itemFragment";
-	ThumbnailTask mThumbnailTask;
-	private ImageView mImgImage;
-	private Item mItem = null;
+	
 	public static DetalleFragment newInstance(Item item) { 
 
 		DetalleFragment _fragment = new DetalleFragment();  
