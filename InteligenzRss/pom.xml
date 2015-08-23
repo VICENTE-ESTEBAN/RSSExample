@@ -18,27 +18,30 @@
 		<url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
 	</repository>
 
-	    <dependencies>
-        <dependency>
-            <groupId>com.android.support</groupId>
-            <artifactId>appcompat-v7</artifactId>
-            <version>22.1.1</version>
-            <type>aar</type>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.android.support</groupId>
-                    <artifactId>support-annotations</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>android</groupId>
-            <artifactId>android</artifactId>
-            <version>5.0.1_r2</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+	<dependencies>
+
+		<dependency>
+			<groupId>com.android.support</groupId>
+			<artifactId>appcompat-v7</artifactId>
+			<version>22.1.1</version>
+			<type>apklib</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.android.support</groupId>
+			<artifactId>appcompat-v7</artifactId>
+			<version>22.1.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>android</groupId>
+			<artifactId>android</artifactId>
+			<version>5.0.1_r2</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -55,21 +58,19 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-				<artifactId>android-maven-plugin</artifactId>
-				<configuration>
-					<sdk>
-						<platform>17</platform>
-					</sdk>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+					<executable>${env.JAVA_HOME}/bin/javac</executable>
+					<fork>true</fork>
+						<sdk>
+                        <!-- platform as api level (api level 19 = platform 4.2)-->
+			            <platform>19</platform>
+			          </sdk>
 				</configuration>
 			</plugin>
 		</plugins>
